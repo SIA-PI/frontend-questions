@@ -52,7 +52,7 @@ project-ssp-deleg/
 │   │       ├── helpers.js # Funções auxiliares
 │   │       └── toast.js  # Sistema de notificações
 │   └── data/             # Dados
-│       └── mock-data.js  # Dados mock
+│       └── data/         # (vazio – dados vêm da API)
 └── Design References/     # Designs de referência
     ├── login_screen/
     ├── evaluator_dashboard_1/
