@@ -86,21 +86,14 @@ npm start
 
 O servidor iniciará em `http://localhost:3001`
 
-## 👤 Usuários de Teste
+## 👤 Usuários
 
-### Administrador
-- **Usuário**: `admin`
-- **Senha**: `admin123`
-- **Perfil**: Acesso completo ao sistema
+Os usuários são criados no **backend** (Django):
 
-### Avaliadores
-- **Usuário**: `avaliador1`
-- **Senha**: `aval123`
-- **Perfil**: Acesso a avaliações
+- **Registro**: `POST /api/register/` com `{ username, email, password, role }` (roles: `administrador`, `gerenciador`, `avaliador`)
+- **Admin**: no backend, `python manage.py createsuperuser` para um administrador com acesso ao Django Admin
 
-- **Usuário**: `avaliador2`
-- **Senha**: `aval123`
-- **Perfil**: Acesso a avaliações
+Depois use o mesmo `username` e `password` para fazer login no frontend.
 
 ## 📋 Funcionalidades
 
@@ -125,18 +118,35 @@ O servidor iniciará em `http://localhost:3001`
 - Exportação de dados (PDF, Excel)
 - Busca e paginação
 
-## 🎯 API Endpoints
+## 🔗 Integração com o Backend (backend-questions)
 
-### Autenticação
-- `POST /api/login` - Realizar login
-- `GET /api/health` - Verificar status do servidor
+O frontend consome a API do backend via **proxy**: todas as requisições para `/api/*` são encaminhadas ao backend. O navegador enxerga apenas a mesma origem, o que reduz exposição e simplifica CORS.
 
-### Avaliações
-- `GET /api/assessments` - Listar avaliações
-- `GET /api/assessments/:id` - Obter avaliação específica
-- `POST /api/assessments` - Criar nova avaliação
-- `PUT /api/assessments/:id` - Atualizar avaliação
-- `DELETE /api/assessments/:id` - Deletar avaliação
+1. **Configure a URL do backend** no `.env` (copie de `.env.example`):
+   ```bash
+   BACKEND_API_URL=http://127.0.0.1:8000
+   ```
+2. **Inicie o backend** (Django) antes do frontend, por exemplo:
+   ```bash
+   cd ../backend-questions && python manage.py runserver
+   ```
+3. **Inicie o frontend**:
+   ```bash
+   npm run dev
+   ```
+4. Acesse `http://localhost:3000` e faça login com um usuário criado no backend (ex.: via `register/` ou `createsuperuser`).
+
+### Autenticação (JWT)
+- Login: `POST /api/token/` com `{ username, password }` → `{ access, refresh }`
+- Perfil: `GET /api/me/` com header `Authorization: Bearer <access>`
+- Refresh: `POST /api/token/refresh/` com `{ refresh }` (uso automático em 401)
+- Health: `GET /api/health/`
+
+### Avaliações (Resultados)
+- Listar: `GET /api/resultados/`
+- Detalhe: `GET /api/resultados/:id/`
+- Iniciar: `POST /api/iniciar-avaliacao/:aluno_id/`
+- Atualizar/Finalizar: `PATCH /api/resultados/:id/`
 
 ## 🎨 Componentes de Design
 
@@ -172,12 +182,12 @@ O sistema é totalmente responsivo:
 
 ## 🔒 Segurança
 
-- Autenticação baseada em tokens (mock JWT)
-- Guards de roteamento
-- Sanitização de inputs
-- Proteção contra XSS
-- CORS configurado
-- Variáveis de ambiente para dados sensíveis
+- **JWT**: autenticação via access + refresh token; refresh automático em 401
+- **Proxy**: requisições `/api/*` passam pelo servidor Node; URL do backend não é exposta ao cliente
+- **Headers**: X-Content-Type-Options, X-Frame-Options, X-XSS-Protection, Referrer-Policy
+- Tokens armazenados em localStorage (access + refresh); nunca logados
+- Guards de roteamento e sessão expirada redirecionando para login
+- Variáveis sensíveis em `.env` (BACKEND_API_URL, PORT)
 
 ## 🚀 Próximos Passos
 
