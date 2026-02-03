@@ -1,7 +1,17 @@
-// Seleção de Aluno Page - Lista Minimalista sem fotos
+// Seleção de Aluno Page - Lista de alunos da API
 
-import { getCurrentUser } from '../utils/api.js';
+import { getCurrentUser, api } from '../utils/api.js';
 import { Sidebar, setupLogoutButton } from './Sidebar.js';
+
+function mapAluno(row) {
+    const classeNome = row.classe && (typeof row.classe === 'object' ? row.classe.nome : row.classe);
+    return {
+        id: row.id,
+        nome: row.nome || '—',
+        turma: classeNome || '—',
+        faixa_etaria: row.faixa_etaria || '—',
+    };
+}
 
 export async function SelecionarAlunoPage() {
     const user = getCurrentUser();
@@ -11,28 +21,35 @@ export async function SelecionarAlunoPage() {
         return '<div></div>';
     }
 
-    // Pegar tipo do teste da URL
-    const urlParams = new URLSearchParams(window.location.hash.split('?')[1]);
-    const tipo = urlParams.get('tipo') || 'teste1';
+    const urlParams = new URLSearchParams(window.location.hash.split('?')[1] || '');
+    const questionarioId = urlParams.get('questionario') || urlParams.get('tipo') || '';
+    const faixaFiltro = urlParams.get('faixa') || '';
 
-    const tipoNomes = {
-        'teste1': 'Teste 1',
-        'teste2': 'Teste 2',
-        'teste3': 'Teste 3'
-    };
+    let alunos = [];
+    let questionarioNome = 'Questionário';
+    let loading = true;
+    let error = null;
+    try {
+        if (user.role === 'admin') {
+            const res = await api.getAlunos({ page: 1 });
+            alunos = (res.data || []).map(mapAluno);
+        } else {
+            const data = await api.getAlunosPorAvaliador(user.id);
+            alunos = (data.data || []).map(mapAluno);
+        }
+        if (questionarioId) {
+            try {
+                const q = await api.getQuestionario(questionarioId);
+                questionarioNome = q.nome || questionarioNome;
+            } catch (_) {}
+        }
+        loading = false;
+    } catch (err) {
+        error = err.message || 'Erro ao carregar alunos';
+        loading = false;
+    }
 
-    const alunos = [
-        { id: 1, nome: 'Ana Souza', turma: '3º Ano B', idade: 14 },
-        { id: 2, nome: 'Carlos Lima', turma: '2º Ano A', idade: 13 },
-        { id: 3, nome: 'Julia Martins', turma: '3º Ano B', idade: 14 },
-        { id: 4, nome: 'Marcos Dias', turma: '1º Ano C', idade: 12 },
-        { id: 5, nome: 'Beatriz Santos', turma: '2º Ano B', idade: 13 },
-        { id: 6, nome: 'Pedro Oliveira', turma: '3º Ano A', idade: 15 },
-        { id: 7, nome: 'Fernanda Costa', turma: '1º Ano A', idade: 12 },
-        { id: 8, nome: 'Rafael Alves', turma: '3º Ano C', idade: 15 },
-        { id: 9, nome: 'Camila Rocha', turma: '2º Ano C', idade: 13 },
-        { id: 10, nome: 'Lucas Ferreira', turma: '1º Ano B', idade: 12 }
-    ];
+    const alunosFiltrados = faixaFiltro ? alunos.filter(a => a.faixa_etaria === faixaFiltro) : alunos;
 
     return `
         <div class="flex h-screen w-full flex-row">
@@ -45,56 +62,43 @@ export async function SelecionarAlunoPage() {
                         <div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
                             <a class="hover:text-primary transition-colors cursor-pointer" onclick="window.router.navigate('/avaliacoes')">Avaliações</a>
                             <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-                            <span>${tipoNomes[tipo]}</span>
+                            <span>${questionarioNome}</span>
                             <span class="material-symbols-outlined text-[14px]">chevron_right</span>
                             <span>Selecionar Aluno</span>
                         </div>
                         
                         <div class="flex items-center justify-between gap-4">
                             <div>
-                                <h1 class="text-[#0d121b] dark:text-white tracking-tight text-2xl md:text-3xl font-bold leading-tight">
-                                    Selecione o Aluno
-                                </h1>
-                                <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Escolha o aluno para aplicar: <strong>${tipoNomes[tipo]}</strong></p>
+                                <h1 class="text-[#0d121b] dark:text-white tracking-tight text-2xl md:text-3xl font-bold leading-tight">Selecione o Aluno</h1>
+                                <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Escolha o aluno para aplicar: <strong>${questionarioNome}</strong></p>
                             </div>
-                            <button onclick="window.router.navigate('/avaliacoes')" class="px-3 py-2 text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
-                                Voltar
-                            </button>
+                            <button onclick="window.router.navigate('/avaliacoes')" class="px-3 py-2 text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Voltar</button>
                         </div>
                     </div>
                     
-                    <!-- Busca -->
+                    ${loading ? `
+                    <div class="flex items-center justify-center py-12"><div class="animate-spin h-10 w-10 border-4 border-primary border-t-transparent rounded-full"></div></div>
+                    ` : error ? `
+                    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 text-red-700 dark:text-red-300">${error}</div>
+                    ` : `
                     <div class="relative">
                         <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">search</span>
                         <input type="text" id="search-aluno" placeholder="Buscar aluno por nome ou turma..." class="w-full h-11 pl-10 pr-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"/>
                     </div>
                     
-                    <!-- Lista Compacta de Alunos -->
                     <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
-                        <div class="divide-y divide-slate-100 dark:divide-slate-700">
-                            ${alunos.map(aluno => `
-                                <div class="aluno-item flex items-center gap-4 p-4 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors cursor-pointer group" data-aluno-id="${aluno.id}" data-tipo="${tipo}">
-                                    <!-- Info -->
+                        <div class="divide-y divide-slate-100 dark:divide-slate-700" id="alunos-list">
+                            ${alunosFiltrados.length === 0 ? '<div class="py-8 text-center text-slate-500 dark:text-slate-400">Nenhum aluno disponível.</div>' : alunosFiltrados.map(aluno => `
+                                <div class="aluno-item flex items-center gap-4 p-4 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors cursor-pointer group" data-aluno-id="${aluno.id}" data-aluno-nome="${(aluno.nome || '').toLowerCase()}" data-turma="${(aluno.turma || '').toLowerCase()}" data-questionario="${questionarioId}">
                                     <div class="flex-1 min-w-0">
                                         <h3 class="text-sm font-semibold text-slate-900 dark:text-white truncate">${aluno.nome}</h3>
                                         <div class="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                                            <span class="flex items-center gap-1">
-                                                <span class="material-symbols-outlined text-[14px]">tag</span>
-                                                #${String(aluno.id).padStart(4, '0')}
-                                            </span>
-                                            <span class="flex items-center gap-1">
-                                                <span class="material-symbols-outlined text-[14px]">school</span>
-                                                ${aluno.turma}
-                                            </span>
-                                            <span class="flex items-center gap-1">
-                                                <span class="material-symbols-outlined text-[14px]">cake</span>
-                                                ${aluno.idade} anos
-                                            </span>
+                                            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">tag</span>#${String(aluno.id).slice(0, 8)}</span>
+                                            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">school</span>${aluno.turma}</span>
+                                            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">cake</span>${aluno.faixa_etaria}</span>
                                         </div>
                                     </div>
-                                    
-                                    <!-- Botão -->
-                                    <button class="px-4 py-2 bg-primary/10 text-primary rounded-lg text-xs font-semibold group-hover:bg-primary group-hover:text-white transition-all flex items-center gap-1 flex-shrink-0">
+                                    <button type="button" class="px-4 py-2 bg-primary/10 text-primary rounded-lg text-xs font-semibold group-hover:bg-primary group-hover:text-white transition-all flex items-center gap-1 flex-shrink-0">
                                         <span>Selecionar</span>
                                         <span class="material-symbols-outlined text-[16px] group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
                                     </button>
@@ -102,11 +106,8 @@ export async function SelecionarAlunoPage() {
                             `).join('')}
                         </div>
                     </div>
-                    
-                    <!-- Info Footer -->
-                    <p class="text-xs text-slate-400 dark:text-slate-500 text-center">
-                        ${alunos.length} alunos disponíveis
-                    </p>
+                    <p class="text-xs text-slate-400 dark:text-slate-500 text-center">${alunosFiltrados.length} alunos disponíveis</p>
+                    `}
                 </div>
             </main>
         </div>
@@ -125,16 +126,22 @@ window.addEventListener('route-changed', (e) => {
 });
 
 function setupAlunoSelection() {
-    const alunoItems = document.querySelectorAll('.aluno-item');
-
-    alunoItems.forEach(item => {
-        item.addEventListener('click', () => {
+    document.querySelectorAll('.aluno-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            if (e.target.closest('button')) return;
             const alunoId = item.dataset.alunoId;
-            const tipo = item.dataset.tipo;
-            console.log('Aluno selecionado:', alunoId, 'Tipo:', tipo);
-            // Navegar para formulário de avaliação
-            window.router.navigate(`/avaliacoes/nova?tipo=${tipo}&aluno=${alunoId}`);
+            const questionarioId = item.dataset.questionario;
+            window.router.navigate(`/avaliacoes/nova?aluno=${alunoId}&questionario=${questionarioId || ''}`);
         });
+        const btn = item.querySelector('button');
+        if (btn) {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const alunoId = item.dataset.alunoId;
+                const questionarioId = item.dataset.questionario;
+                window.router.navigate(`/avaliacoes/nova?aluno=${alunoId}&questionario=${questionarioId || ''}`);
+            });
+        }
     });
 }
 
@@ -142,17 +149,14 @@ function setupSearch() {
     const searchInput = document.getElementById('search-aluno');
     const alunoItems = document.querySelectorAll('.aluno-item');
 
-    if (searchInput) {
+    if (searchInput && alunoItems.length) {
         searchInput.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-
+            const searchTerm = (e.target.value || '').toLowerCase();
             alunoItems.forEach(item => {
-                const text = item.textContent.toLowerCase();
-                if (text.includes(searchTerm)) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = 'none';
-                }
+                const nome = item.dataset.alunoNome || '';
+                const turma = item.dataset.turma || '';
+                const show = !searchTerm || nome.includes(searchTerm) || turma.includes(searchTerm);
+                item.style.display = show ? 'flex' : 'none';
             });
         });
     }
