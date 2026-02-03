@@ -66,12 +66,6 @@ export async function LoginPage() {
                                 <span class="truncate">Entrar</span>
                             </button>
                         </form>
-                        
-                        <div class="mt-8 text-center">
-                            <p class="text-sm text-[#4c669a] dark:text-slate-400">
-                                Usuários de teste: <strong>admin/admin123</strong> ou <strong>avaliador1/aval123</strong>
-                            </p>
-                        </div>
                     </div>
                     
                     <!-- Footer -->

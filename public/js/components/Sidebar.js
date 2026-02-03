@@ -48,10 +48,10 @@ export function Sidebar(user, activePage = 'dashboard') {
                         <span class="material-symbols-outlined text-[24px] flex-shrink-0">badge</span>
                         <span class="sidebar-text text-sm ${activePage === 'avaliadores' ? 'font-semibold' : 'font-medium'} whitespace-nowrap overflow-hidden transition-all duration-300">Avaliadores</span>
                     </a>
-                    <a class="flex items-center gap-3 px-4 py-3 rounded-lg ${activePage === 'relatorios' ? 'bg-white/15 text-white shadow-sm ring-1 ring-white/10' : 'text-white/80 hover:bg-white/10 hover:text-white'} transition-all duration-200" href="#/relatorios">
+                    ${user.role === 'admin' ? `<a class="flex items-center gap-3 px-4 py-3 rounded-lg ${activePage === 'relatorios' ? 'bg-white/15 text-white shadow-sm ring-1 ring-white/10' : 'text-white/80 hover:bg-white/10 hover:text-white'} transition-all duration-200" href="#/relatorios">
                         <span class="material-symbols-outlined text-[24px] flex-shrink-0">bar_chart</span>
                         <span class="sidebar-text text-sm ${activePage === 'relatorios' ? 'font-semibold' : 'font-medium'} whitespace-nowrap overflow-hidden transition-all duration-300">Relatórios</span>
-                    </a>
+                    </a>` : ''}
                     <div class="h-px bg-white/10 my-2 mx-4"></div>
                     <a class="flex items-center gap-3 px-4 py-3 rounded-lg ${activePage === 'configuracoes' ? 'bg-white/15 text-white shadow-sm ring-1 ring-white/10' : 'text-white/80 hover:bg-white/10 hover:text-white'} transition-all duration-200" href="#/configuracoes">
                         <span class="material-symbols-outlined text-[24px] flex-shrink-0">settings</span>
