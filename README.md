@@ -217,7 +217,7 @@ Para suporte técnico ou dúvidas sobre o sistema, entre em contato com a equipe
 
 ---
 
-**Desenvolvido com ❤️ para SSP - Secretaria de Segurança Pública do Ceará**
+**Desenvolvido com ❤️ para SSP - Secretaria de Segurança Pública do Piauí**
 
 **Versão**: 1.0.0  
 **Última atualização**: Fevereiro 2026
