@@ -9,12 +9,10 @@ export async function LoginPage() {
             <!-- Left Side: Login Form -->
             <div class="flex flex-col justify-center w-full lg:w-1/2 xl:w-[40%] px-6 py-12 lg:px-20 z-10 bg-white dark:bg-[#1a2235] shadow-xl lg:shadow-none">
                 <div class="w-full max-w-[480px] mx-auto flex flex-col h-full justify-between">
-                    <!-- Logo -->
-                    <div class="flex items-center gap-3 mb-10">
-                        <div class="flex items-center justify-center size-10 rounded-lg bg-primary/10 text-primary">
-                            <span class="material-symbols-outlined text-[28px]">psychology</span>
-                        </div>
-                        <h2 class="text-xl font-bold tracking-tight text-[#0d121b] dark:text-white">Avalia.Ed</h2>
+                    <!-- Logo SSP acima das caixas de texto -->
+                    <div class="flex items-center gap-3 mb-8">
+                        <img src="/assets/logo.png" alt="Logo SSP-PI" class="h-12 w-auto object-contain" />
+                        <img src="/assets/icon.svg" alt="Ícone do Projeto" class="h-8 w-8 object-contain" />
                     </div>
                     
                     <!-- Main Content -->
@@ -78,19 +76,19 @@ export async function LoginPage() {
             </div>
             
             <!-- Right Side: Illustration / Visuals -->
-            <div class="hidden lg:flex w-1/2 xl:w-[60%] bg-cover bg-center relative items-center justify-center p-12" style="background: linear-gradient(135deg, #135bec 0%, #0e4bca 100%);">
+            <div class="max-lg:hidden lg:flex w-1/2 xl:w-[60%] bg-cover bg-center relative items-center justify-center p-12 bg-[url('/assets/fundo.png')]">
                 <!-- Dark Overlay -->
-                <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                <div class="absolute inset-0 bg-slate-900/75 z-10 backdrop-blur-[2px]"></div>
                 
                 <!-- Floating Content -->
-                <div class="relative z-10 max-w-lg text-white">
-                    <div class="mb-8 inline-flex items-center justify-center size-16 rounded-2xl bg-white/20 backdrop-blur-md border border-white/30">
-                        <span class="material-symbols-outlined text-[32px] text-white">analytics</span>
+                <div class="relative z-20 max-w-lg text-white">
+                    <div class="mb-8 inline-flex items-center justify-center size-16 rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 shadow-lg">
+                        <img src="/assets/icon.svg" alt="Ícone SSP Avalia" class="w-10 h-10" />
                     </div>
-                    <h2 class="text-4xl xl:text-5xl font-bold leading-tight mb-6">
+                    <h2 class="text-4xl xl:text-5xl font-bold leading-tight mb-6 text-white drop-shadow-md">
                         Sistema Integrado de Avaliação
                     </h2>
-                    <p class="text-lg xl:text-xl text-blue-100 font-light leading-relaxed mb-8">
+                    <p class="text-lg xl:text-xl text-blue-50 font-light leading-relaxed mb-8 drop-shadow">
                         Gerencie avaliações comportamentais com eficiência e transparência. Dados em tempo real para decisões estratégicas.
                     </p>
                     

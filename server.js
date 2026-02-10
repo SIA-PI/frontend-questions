@@ -79,6 +79,13 @@ app.use(
     target: BACKEND_API_URL,
     changeOrigin: true,
     logLevel: 'warn',
+    onProxyRes: (proxyRes) => {
+      // Garantir que respostas JSON do backend incluam charset=utf-8
+      const ct = proxyRes.headers['content-type'] || '';
+      if (ct.includes('application/json') && !ct.includes('charset')) {
+        proxyRes.headers['content-type'] = ct + '; charset=utf-8';
+      }
+    },
     onError: (err, req, res) => {
       console.error('❌ Proxy error:', err.message);
       res.status(502).json({ error: 'Serviço indisponível. Verifique se o backend está rodando.' });

@@ -34,8 +34,7 @@ export async function NovaAvaliacaoPage() {
     if (alunoIdNorm) {
         try {
             aluno = await api.getAluno(alunoIdNorm);
-            aluno._classeNome =
-                aluno.classe && (typeof aluno.classe === 'object' ? aluno.classe.nome : aluno.classe);
+            aluno._classeNome = aluno.classe_nome || '—';
             aluno._idShort = String(aluno.id).slice(0, 8);
 
             // Sempre buscar resultado DESTE aluno via endpoint por-aluno (evita confusão entre alunos)
@@ -51,14 +50,12 @@ export async function NovaAvaliacaoPage() {
             }
 
             // Garantir que o resultado é do aluno da URL
-            const resultadoAlunoId = resultado.aluno && (typeof resultado.aluno === 'object' ? resultado.aluno.id : resultado.aluno);
-            if (String(resultadoAlunoId || '').trim() !== alunoIdNorm) {
+            const resultadoAlunoId = String(resultado.aluno || '').trim();
+            if (resultadoAlunoId !== alunoIdNorm) {
                 error = 'Avaliação não corresponde ao aluno selecionado. Recarregue a página.';
                 loading = false;
             } else {
-                const questionarioId =
-                    resultado.questionario &&
-                    (typeof resultado.questionario === 'object' ? resultado.questionario.id : resultado.questionario);
+                const questionarioId = resultado.questionario;
                 if (questionarioId) {
                     questionario = await api.getQuestionario(questionarioId);
                     questoes = await api.getQuestoes(questionarioId);
@@ -292,12 +289,36 @@ async function salvarRascunho(resultadoId) {
         toast.error('Aluno da página não confere com a URL. Recarregue e tente novamente.');
         return;
     }
-    const respostas = getRespostasFromForm();
-    if (respostas.length === 0) {
+
+    // Coletar respostas do formulário (apenas as respondidas na sessão atual)
+    const formRespostas = getRespostasFromForm();
+
+    // Buscar respostas já salvas no servidor para NÃO perder as de outros blocos
+    let serverRespostas = [];
+    try {
+        const raw = await api.getRespostas({ resultado: resultadoId });
+        serverRespostas = Array.isArray(raw) ? raw : [];
+    } catch (_) { }
+
+    // Mesclar: respostas do formulário têm prioridade sobre as do servidor
+    const mergedMap = {};
+    serverRespostas.forEach(r => {
+        const qId = r.question && (typeof r.question === 'object' ? r.question.id : r.question);
+        if (qId && (r.valor === 0 || r.valor === 1)) {
+            mergedMap[qId] = { question: qId, valor: r.valor };
+        }
+    });
+    formRespostas.forEach(r => {
+        mergedMap[r.question] = r; // Formulário sobrescreve o servidor
+    });
+
+    const merged = Object.values(mergedMap);
+    if (merged.length === 0) {
         toast.info('Nenhuma resposta para salvar.');
         return;
     }
-    await api.salvarRespostas(resultadoId, respostas);
+
+    await api.salvarRespostas(resultadoId, merged);
     toast.success('Respostas salvas.');
 }
 

@@ -4,11 +4,10 @@ import { getCurrentUser, api } from '../utils/api.js';
 import { Sidebar, setupLogoutButton } from './Sidebar.js';
 
 function mapAluno(row) {
-    const classeNome = row.classe && (typeof row.classe === 'object' ? row.classe.nome : row.classe);
     return {
         id: row.id,
         nome: row.nome || '—',
-        turma: classeNome || '—',
+        turma: row.classe_nome || '—',
         faixa_etaria: row.faixa_etaria || '—',
     };
 }
@@ -41,7 +40,7 @@ export async function SelecionarAlunoPage() {
             try {
                 const q = await api.getQuestionario(questionarioId);
                 questionarioNome = q.nome || questionarioNome;
-            } catch (_) {}
+            } catch (_) { }
         }
         loading = false;
     } catch (err) {

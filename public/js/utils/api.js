@@ -14,6 +14,7 @@ import {
   setRefreshToken,
 } from '../services/authStorage.js';
 import { fetchWithAuth, fetchWithToken, fetchWithoutAuth } from '../services/httpClient.js';
+import { withCache } from './cache.js';
 
 /**
  * Converte perfil do backend (/api/me/) para formato esperado pelo frontend.
@@ -196,7 +197,7 @@ export const api = {
     };
   },
 
-  getEscola: (id) => fetchWithAuth(`/escolas/${id}/`),
+  getEscola: withCache((id) => fetchWithAuth(`/escolas/${id}/`), 'escola'),
 
   createEscola: async (escolaData) => {
     return fetchWithAuth('/escolas/', {
@@ -232,7 +233,7 @@ export const api = {
     };
   },
 
-  getMunicipio: (id) => fetchWithAuth(`/municipios/${id}/`),
+  getMunicipio: withCache((id) => fetchWithAuth(`/municipios/${id}/`), 'municipio'),
 
   createMunicipio: async (municipioData) => {
     return fetchWithAuth('/municipios/', {
@@ -268,7 +269,7 @@ export const api = {
     };
   },
 
-  getClasse: (id) => fetchWithAuth(`/classes/${id}/`),
+  getClasse: withCache((id) => fetchWithAuth(`/classes/${id}/`), 'classe'),
 
   createClasse: async (classeData) => {
     return fetchWithAuth('/classes/', {
@@ -327,7 +328,7 @@ export const api = {
     };
   },
 
-  getAvaliador: (id) => fetchWithAuth(`/avaliadores/${id}/`),
+  getAvaliador: withCache((id) => fetchWithAuth(`/avaliadores/${id}/`), 'avaliador'),
 
   createAvaliador: async (avaliadorData) => {
     return fetchWithAuth('/avaliadores/', {
@@ -373,6 +374,10 @@ export const api = {
     const endpoint = `/respostas/${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
     const data = await fetchWithAuth(endpoint);
     return data.results ?? (Array.isArray(data) ? data : []);
+  },
+
+  getDashboardStats: async () => {
+    return fetchWithAuth('/dashboard/stats/');
   },
 
   // Health (backend)

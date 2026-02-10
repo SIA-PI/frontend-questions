@@ -41,10 +41,10 @@ export async function AvaliacoesPage() {
             const dateRaw = r.created_at || r.updated_at || r.data_criacao || r.data || '';
             return {
                 id: r.id,
-                alunoId: r.aluno && (typeof r.aluno === 'object' ? r.aluno.id : r.aluno),
-                aluno: (r.aluno && (typeof r.aluno === 'object' ? r.aluno.nome : null)) || ('Avaliação #' + (r.id || '').toString().slice(0, 8)),
-                turma: r.aluno && typeof r.aluno === 'object' && r.aluno.classe ? (typeof r.aluno.classe === 'object' ? r.aluno.classe.nome : r.aluno.classe) : '—',
-                questionario: (r.questionario && (typeof r.questionario === 'object' ? r.questionario.nome : null)) || 'Questionário',
+                alunoId: r.aluno,
+                aluno: r.aluno_nome || ('Avaliação #' + (r.id || '').toString().slice(0, 8)),
+                turma: '—',
+                questionario: r.questionario_nome || 'Questionário',
                 data: dateRaw,
                 status: r.status,
                 statusLabel: statusLabel[r.status] || r.status,

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" aria-label="Ícone SSP Avalia">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#135bec"/>
+      <stop offset="1" stop-color="#0e4bca"/>
+    </linearGradient>
+  </defs>
+  <path d="M64 8c20 0 40-6 48 10 2 4 2 9 2 14 0 36-13 63-50 84-37-21-50-48-50-84 0-5 0-10 2-14C24 2 44 8 64 8z" fill="url(#g)"/>
+  <circle cx="64" cy="56" r="24" fill="#ffffff22"/>
+  <path d="M52 60l8 8 16-20" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <g fill="#ffcc00">
+    <path d="M64 24l4 8 9 1-7 6 2 9-8-4-8 4 2-9-7-6 9-1z"/>
+  </g>
+</svg>

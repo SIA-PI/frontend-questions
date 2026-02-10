@@ -1,7 +1,7 @@
 import { APP_CONFIG } from '../config/appConfig.js';
 import { clearAuthData, getAccessToken, getRefreshToken, setAccessToken } from './authStorage.js';
 
-const JSON_HEADERS = { 'Content-Type': 'application/json' };
+const JSON_HEADERS = { 'Content-Type': 'application/json; charset=utf-8', 'Accept': 'application/json' };
 
 function buildUrl(endpoint) {
   return `${APP_CONFIG.apiBaseUrl}${endpoint}`;

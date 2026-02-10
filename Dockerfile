@@ -4,8 +4,8 @@ FROM node:20-alpine
 WORKDIR /app
 
 # Criar usuário não-root
-RUN addgroup -g 1000 appgroup && \
-    adduser -D -u 1000 -G appgroup appuser
+RUN addgroup -S appgroup && \
+    adduser -S -G appgroup appuser
 
 # Copiar package files
 COPY package*.json ./
