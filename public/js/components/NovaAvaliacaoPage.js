@@ -11,6 +11,11 @@ export async function NovaAvaliacaoPage() {
         return '<div></div>';
     }
 
+    const hashStr = window.location.hash || '';
+    const queryString = hashStr.includes('?') ? hashStr.split('?')[1] : '';
+    const urlParams = new URLSearchParams(queryString);
+    const tipo = urlParams.get('tipo') || 'teste1';
+
     return `
         <div class="flex h-screen w-full flex-row">
             ${Sidebar(user, 'avaliacoes')}
@@ -81,13 +86,11 @@ export async function NovaAvaliacaoPage() {
                                     <textarea class="w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm focus:border-primary focus:ring-primary sm:text-sm placeholder:text-slate-400" id="notes" placeholder="Descreva brevemente o estado inicial do aluno e o ambiente..." rows="3"></textarea>
                                 </div>
                             </div>
+                        <hr class="border-slate-200 dark:border-slate-700"/>    
                         </section>
-                        
-                        <hr class="border-slate-200 dark:border-slate-700"/>
-                        
                         <section class="flex flex-col gap-4">
                             <div class="flex items-center gap-2 mb-2">
-                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary font-bold text-sm">2</span>
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary font-bold text-sm">${tipo === 'teste1' ? '2' : '2'}</span>
                                 <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Traços Comportamentais</h3>
                             </div>
                             <div class="grid grid-cols-1 gap-6">
@@ -96,12 +99,477 @@ export async function NovaAvaliacaoPage() {
                                 ${createTraitCard('Resolução de Conflitos', 'Habilidade em lidar com adversidades ou desentendimentos.', 2, 'Agressivo/Passivo', 'Assertivo', '')}
                             </div>
                         </section>
+                        <hr class="border-slate-200 dark:border-slate-700"/>
+
+                        ${tipo === 'teste1' ? `
+                        <hr class="border-slate-200 dark:border-slate-700"/>
                         
+                        <section class="flex flex-col gap-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary font-bold text-sm">3</span>
+                                <h3 class="text-xl font-semibold text-slate-900 dark:text-white">INTERSECCIONALIDADE</h3>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                ${createYesNoQuestion('e_crianca', 'É criança?')}
+                                ${createYesNoQuestion('sexo_feminino', 'É do sexo feminino?')}
+                                ${createYesNoQuestion('preto_pardo', 'A família identifica a estudante como preto(a) ou pardo(a)?')}
+                                ${createYesNoQuestion('religiao_africana', 'A família se identifica com religião da matriz africana?')}
+                                ${createYesNoQuestion('deficiencia', 'O (a) estudante possui deficiência física, intelectual ou doença degenerativa?')}
+                                ${createYesNoQuestion('beneficio', 'A família recebe algum benefício de transferência de renda do governo?')}
+                                ${createYesNoQuestion('renda', 'A Renda familiar é menor do que 3 SM?')}
+                            </div>
+                        </section>
+
+                        <hr class="border-slate-200 dark:border-slate-700"/>
+
+                        <section class="flex flex-col gap-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary font-bold text-sm">4</span>
+                                <h3 class="text-xl font-semibold text-slate-900 dark:text-white">REDE FAMILIAR</h3>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                ${createYesNoQuestion('fam_monoparental_mulher', 'O (a) estudante está em família monoparental chefiada por mulher?')}
+                                ${createYesNoQuestion('orfao_feminicidio', 'O (a) estudante é órfão do Feminicídio?')}
+                                ${createYesNoQuestion('irmao_deficiencia', 'O (a) estudante possui irmão com deficiência?')}
+                                ${createYesNoQuestion('irmao_evasao', 'O (a) estudante possui irmão com histórico de evasão escolar?')}
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('composicao_familiar', 'Os pais são separados, convive com padrasto, os pais são falecidos, possui somente pai ou possui somente mãe?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('atividades_ilicitas', 'Há relatos de que familiares do aluno atuam em atividades ilícitas?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('fam_nao_participa', 'A família NÃO participa de forma assídua e frequente da vida escolar do aluno?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('troca_cuidador', 'Ocorre a troca de cuidador(a) do estudante de forma recorrente?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('violencia_intrafamiliar', 'O (a) estudante já presenciou alguma situação de violência intrafamiliar?')}
+                                </div>
+                            </div>
+                        </section>
+
+                        <hr class="border-slate-200 dark:border-slate-700"/>
+
+                        <section class="flex flex-col gap-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary font-bold text-sm">5</span>
+                                <h3 class="text-xl font-semibold text-slate-900 dark:text-white">SAÚDE</h3>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                ${createYesNoQuestion('saude_inseguranca_alimentar', 'Tem indícios de que o (a) estudante esteja em situação de insegurança alimentar?')}
+                                ${createYesNoQuestion('saude_higiene_comprometida', 'A higiene pessoal do aluno está comprometida?')}
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('saude_comportamento', 'O estudante apresenta comportamento : agressivos, retraídos, irritação excessiva ou regressivos?')}
+                                </div>
+                                ${createYesNoQuestion('saude_carteira_desatualizada', 'A carteira de saúde do aluno não está atualizada?')}
+                                ${createYesNoQuestion('saude_medicacao', 'Faz uso de alguma medicação?')}
+                                ${createYesNoQuestion('saude_acompanhamento', 'O aluno faz algum acompanhamento multiprofissional?')}
+                                ${createYesNoQuestion('saude_intolerancia', 'O estudante possui alguma intolerância alimentar?')}
+                            </div>
+                        </section>
+                        <hr class="border-slate-200 dark:border-slate-700"/>
+
+                        <section class="flex flex-col gap-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary font-bold text-sm">6</span>
+                                <h3 class="text-xl font-semibold text-slate-900 dark:text-white">EDUCAÇÃO</h3>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('educacao_desenvolvimento', 'O estudante apresenta desenvolvimento cognitivo ou motor inadequados para idade?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('educacao_faltas', 'O (a) aluno (a) possui faltas recorrentes à escola?')}
+                                </div>
+                            </div>
+                        </section>
+
+                        <hr class="border-slate-200 dark:border-slate-700"/>
+
+                        <section class="flex flex-col gap-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary font-bold text-sm">7</span>
+                                <h3 class="text-xl font-semibold text-slate-900 dark:text-white">SÓCIO-TERRITORIAL</h3>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('socioterritorial_distancia', 'O (a) estudante NÃO mora próximo a escola?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('socioterritorial_vulnerabilidade_social', 'O (a) estudante reside em área de vulnerabilidade social (moradia precária)?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('socioterritorial_vulnerabilidade_criminal', 'Sabe informar se o (a) estudante reside em área de vulnerabilidade criminal (área violentada)?')}
+                                </div>
+                            </div>
+                        </section>
+
+                        <hr class="border-slate-200 dark:border-slate-700"/>
+
+                        <section class="flex flex-col gap-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary font-bold text-sm">8</span>
+                                <h3 class="text-xl font-semibold text-slate-900 dark:text-white">SEGURANÇA</h3>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('seguranca_lesoes', 'O (a) estudante possui lesões resultantes de alguma violência sofrida?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('seguranca_violencia_sexual', 'O (a) estudante foi vítima de violência sexual?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('seguranca_maus_tratos', 'O aluno apresenta sinais de maus tratos?')}
+                                </div>
+                            </div>
+                        </section>
+                        ` : ''}
+
+                        ${tipo === 'teste2' ? `
+                        <hr class="border-slate-200 dark:border-slate-700"/>
+                        
+                        <section class="flex flex-col gap-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary font-bold text-sm">3</span>
+                                <h3 class="text-xl font-semibold text-slate-900 dark:text-white">INTERSECCIONALIDADE</h3>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                ${createYesNoQuestion('t2_crianca', 'É Criança ?')}
+                                ${createYesNoQuestion('t2_sexo', 'É do sexo feminino?')}
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_raca', 'A família ou o (a) estudante se identifica como preto(a) ou pardo(a)?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_religiao', 'A família ou estudante se identifica com religião da matriz africana?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_deficiencia', 'O (a) estudante possui deficiência física, intelectual ou doença degenerativa?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_beneficio', 'A família recebe algum benefício de transferência de renda do governo?')}
+                                </div>
+                                ${createYesNoQuestion('t2_renda', 'A Renda familiar é menor do que 3 SM?')}
+                            </div>
+                        </section>
+
+                        <hr class="border-slate-200 dark:border-slate-700"/>
+
+                        <section class="flex flex-col gap-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary font-bold text-sm">4</span>
+                                <h3 class="text-xl font-semibold text-slate-900 dark:text-white">REDE FAMILIAR</h3>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_monoparental', 'O (a) estudante está em família monoparental chefiada por mulher?')}
+                                </div>
+                                ${createYesNoQuestion('t2_orfao', 'O (a) estudante é órfão do Feminicídio?')}
+                                ${createYesNoQuestion('t2_irmao_deficiencia', 'O (a) estudante possui irmão com deficiência?')}
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_irmao_evasao', 'O (a) estudante possui irmão com histórico de evasão escolar?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_pais_separados', 'Os pais são separados, convive com padrasto, os pais são falecidos, possui somente pai ou possui somente mãe?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_ilicitas', 'Há relatos de que familiares do aluno atuam em atividades ilícitas?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_participa_escola', 'A família não participa de forma assídua e frequente da vida escolar do aluno?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_violencia_intra', 'O (a) estudante já presenciou alguma situação de violência intrafamiliar?')}
+                                </div>
+                            </div>
+                        </section>
+
+                        <hr class="border-slate-200 dark:border-slate-700"/>
+
+                        <section class="flex flex-col gap-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary font-bold text-sm">5</span>
+                                <h3 class="text-xl font-semibold text-slate-900 dark:text-white">SAÚDE</h3>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_fragilidade', 'O (a) estudante possui alguma fragilidade emocional?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_inseguranca', 'Tem indícios de que o (a) estudante esteja em situação de insegurança alimentar?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_comportamento', 'O estudante apresenta comportamento : agressivos, retraídos, irritação excessiva ou regressivos?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_acompanhamento', 'O aluno faz algum acompanhamento multiprofissional?')}
+                                </div>
+                            </div>
+                        </section>
+
+                        <hr class="border-slate-200 dark:border-slate-700"/>
+
+                        <section class="flex flex-col gap-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary font-bold text-sm">6</span>
+                                <h3 class="text-xl font-semibold text-slate-900 dark:text-white">EDUCAÇÃO</h3>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                ${createYesNoQuestion('t2_repetiu', 'O (a) estudante já repetiu de ano?')}
+                                ${createYesNoQuestion('t2_faltas', 'O (a) aluno (a) possui faltas recorrentes à escola?')}
+                                ${createYesNoQuestion('t2_abandonou', 'O (a) estudante abandonou a escola alguma vez?')}
+                            </div>
+                        </section>
+
+                        <hr class="border-slate-200 dark:border-slate-700"/>
+
+                        <section class="flex flex-col gap-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary font-bold text-sm">7</span>
+                                <h3 class="text-xl font-semibold text-slate-900 dark:text-white">SÓCIO-TERRITORIAL</h3>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_transporte', 'O (a) estudante tem dificuldade de acessar transporte público?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_vuln_social', 'O (a) estudante reside em área de vulnerabilidade social (moradia precária)?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_vuln_criminal', 'Sabe informar se o (a) estudante reside em área de vulnerabilidade criminal (área violentada)?')}
+                                </div>
+                            </div>
+                        </section>
+
+                        <hr class="border-slate-200 dark:border-slate-700"/>
+
+                        <section class="flex flex-col gap-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary font-bold text-sm">8</span>
+                                <h3 class="text-xl font-semibold text-slate-900 dark:text-white">SEGURANÇA</h3>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                ${createYesNoQuestion('t2_sofreu_bullying', 'O (a) estudante sofreu bullying?')}
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_lesoes', 'O (a) estudante possui lesões resultantes de alguma violência sofrida?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_vitima_sexual', 'O (a) estudante foi vítima de violência sexual?')}
+                                </div>
+                                ${createYesNoQuestion('t2_praticou_bullying', 'O (a) estudante praticou Bullying?')}
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_atritos_colegas', 'O (a) estudante já teve atritos com colegas?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_atritos_prof', 'O (a) estudante já teve atritos com professores e/ou colaboradores?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_viol_virtual', 'O (a) estudante se há suspeita de que o (a) aluno tenha sofrido violência em ambiente virtual?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_liderancas', 'Há relatos de lideranças negativas no território em que o (a) aluno(a) reside?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t2_maus_tratos', 'O aluno apresenta sinais de maus tratos?')}
+                                </div>
+                            </div>
+                        </section>
+                        ` : ''}
+
+                        ${tipo === 'teste3' ? `
+                        <hr class="border-slate-200 dark:border-slate-700"/>
+                        
+                        <section class="flex flex-col gap-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary font-bold text-sm">3</span>
+                                <h3 class="text-xl font-semibold text-slate-900 dark:text-white">INTERSECCIONALIDADE</h3>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                ${createYesNoQuestion('t3_crianca_adol', 'É Criança ou adolescente?')}
+                                ${createYesNoQuestion('t3_sexo', 'É do sexo feminino?')}
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_nao_hetero', 'O (a) estudante NÃO se identifica como heterossexual? (orientação sexual)')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_raca', 'A família ou o (a) estudante se identifica como preto(a) ou pardo(a)?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_religiao', 'A família ou estudante se identifica com religião da matriz africana?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_deficiencia', 'O (a) estudante possui deficiência física, intelectual ou doença degenerativa?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_beneficio', 'A família recebe algum benefício de transferência de renda do governo?')}
+                                </div>
+                                ${createYesNoQuestion('t3_renda', 'A Renda familiar é menor do que 3 SM?')}
+                            </div>
+                        </section>
+
+                        <hr class="border-slate-200 dark:border-slate-700"/>
+
+                        <section class="flex flex-col gap-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary font-bold text-sm">4</span>
+                                <h3 class="text-xl font-semibold text-slate-900 dark:text-white">REDE FAMILIAR</h3>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_monoparental', 'O (a) estudante está em família monoparental chefiada por mulher?')}
+                                </div>
+                                ${createYesNoQuestion('t3_orfao', 'O (a) estudante é órfão do Feminicídio?')}
+                                ${createYesNoQuestion('t3_irmao_deficiencia', 'O (a) estudante possui irmão com deficiência?')}
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_irmao_evasao', 'O (a) estudante possui irmão com histórico de evasão escolar?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_pais_separados', 'Os pais são separados, convive com padrasto, os pais são falecidos, possui somente pai ou possui somente mãe?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_ilicitas', 'Há relatos de que familiares do aluno atuam em atividades ilícitas?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_participa_escola', 'A família não participa de forma assídua e frequente da vida escolar do aluno?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_violencia_intra', 'O (a) estudante já presenciou alguma situação de violência intrafamiliar?')}
+                                </div>
+                            </div>
+                        </section>
+
+                        <hr class="border-slate-200 dark:border-slate-700"/>
+
+                        <section class="flex flex-col gap-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary font-bold text-sm">5</span>
+                                <h3 class="text-xl font-semibold text-slate-900 dark:text-white">SAÚDE</h3>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                ${createYesNoQuestion('t3_aborto', 'A estudante realizou aborto?')}
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_fragilidade', 'O (a) estudante possui alguma fragilidade emocional?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_drogas', 'O (a) estudante faz uso de drogas lícitas e/ou ilícitas?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_suicida', 'O (a) estudante apresentou comportamento ou fala de ideação suicida?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_autolesao', 'O (a) estudante apresenta sinais de autolesão?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_prostituicao', 'Tem indícios no (a) estudante de prostituição e/ou exploração sexual?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_maternidade', 'Há casos de maternidade ou paternidade na adolescência do (a) estudante?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_inseguranca', 'Tem indícios de que o (a) estudante esteja em situação de insegurança alimentar?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_acompanhamento', 'O aluno faz algum acompanhamento multiprofissional?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_higiene_menstrual', 'O (a) estudante possui meios para manter higiene menstrual?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_sentimentos', 'O (a) estudante esboça sentimentos de vaidade, vingança ou insatisfação?')}
+                                </div>
+                            </div>
+                        </section>
+
+                        <hr class="border-slate-200 dark:border-slate-700"/>
+
+                        <section class="flex flex-col gap-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary font-bold text-sm">6</span>
+                                <h3 class="text-xl font-semibold text-slate-900 dark:text-white">EDUCAÇÃO</h3>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                ${createYesNoQuestion('t3_repetiu', 'O (a) estudante já repetiu de ano?')}
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_faltas', 'O (a) aluno (a) possui faltas recorrentes à escola?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_abandonou', 'O (a) estudante abandonou a escola alguma vez?')}
+                                </div>
+                            </div>
+                        </section>
+
+                        <hr class="border-slate-200 dark:border-slate-700"/>
+
+                        <section class="flex flex-col gap-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary font-bold text-sm">7</span>
+                                <h3 class="text-xl font-semibold text-slate-900 dark:text-white">SÓCIO-TERRITORIAL</h3>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_transporte', 'O (a) estudante tem dificuldade de acessar transporte público?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_vuln_social', 'O (a) estudante reside em área de vulnerabilidade social (moradia precária)?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_vuln_criminal', 'Sabe informar se o (a) estudante reside em área de vulnerabilidade criminal (área violentada)?')}
+                                </div>
+                            </div>
+                        </section>
+
+                        <hr class="border-slate-200 dark:border-slate-700"/>
+
+                        <section class="flex flex-col gap-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary font-bold text-sm">8</span>
+                                <h3 class="text-xl font-semibold text-slate-900 dark:text-white">SEGURANÇA</h3>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                ${createYesNoQuestion('t3_sofreu_bullying', 'O (a) estudante sofreu bullying?')}
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_lesoes', 'O (a) estudante possui lesões resultantes de alguma violência sofrida?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_vitima_sexual', 'O (a) estudante foi vítima de violência sexual?')}
+                                </div>
+                                ${createYesNoQuestion('t3_praticou_bullying', 'O (a) estudante praticou Bullying?')}
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_atritos_colegas', 'O (a) estudante já teve atritos com colegas?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_atritos_prof', 'O (a) estudante já teve atritos com professores e/ou colaboradores?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_viol_virtual', 'O (a) estudante se há suspeita de que o (a) aluno tenha sofrido violência em ambiente virtual?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_usado_ilicitas', 'Há suspeita de que o (a) estudante tenha sido usado para atuar em atividades ilícitas?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_arma_fogo', 'Há suspeita de que o (a) estudante já tenha portado arma de fogo na escola?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_arma_branca', 'Há suspeita de que o (a) estudante já tenha portado arma branca na escola?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_drogas_escola', 'Há suspeita de que o (a) estudante tenha portado drogas na escola?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_liderancas', 'Há relatos de lideranças negativas no território em que o (a) aluno(a) reside?')}
+                                </div>
+                                <div class="col-span-1 md:col-span-2">
+                                    ${createYesNoQuestion('t3_maus_tratos', 'O aluno apresenta sinais de maus tratos?')}
+                                </div>
+                            </div>
+                        </section>
+                        ` : ''}
+
                         <hr class="border-slate-200 dark:border-slate-700"/>
                         
                         <section class="flex flex-col gap-4 mb-8">
                             <div class="flex items-center gap-2 mb-2">
-                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary font-bold text-sm">3</span>
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary font-bold text-sm">${(tipo === 'teste1' || tipo === 'teste2' || tipo === 'teste3') ? '9' : '3'}</span>
                                 <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Parecer Final</h3>
                             </div>
                             <div>
@@ -141,6 +609,30 @@ function createTraitCard(title, description, value, labelMin, labelMid, labelMax
                 <span>${labelMin}</span>
                 ${labelMid ? `<span>${labelMid}</span>` : ''}
                 ${labelMax ? `<span>${labelMax}</span>` : ''}
+            </div>
+        </div>
+    `;
+}
+
+function createYesNoQuestion(name, label) {
+    return `
+        <div class="flex flex-col gap-3 p-4 bg-slate-50 dark:bg-slate-800/30 border border-slate-200 dark:border-slate-700 rounded-xl">
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 leading-tight">${label}</label>
+            <div class="flex gap-6 mt-1">
+                <label class="flex items-center gap-2 cursor-pointer group">
+                    <div class="relative flex items-center justify-center">
+                        <input type="radio" name="${name}" value="Sim" class="peer w-5 h-5 appearance-none border-2 border-slate-300 dark:border-slate-600 rounded-full checked:border-primary transition-all">
+                        <div class="absolute w-2.5 h-2.5 bg-primary rounded-full scale-0 peer-checked:scale-100 transition-transform"></div>
+                    </div>
+                    <span class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-primary transition-colors">Sim</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer group">
+                    <div class="relative flex items-center justify-center">
+                        <input type="radio" name="${name}" value="Não" class="peer w-5 h-5 appearance-none border-2 border-slate-300 dark:border-slate-600 rounded-full checked:border-primary transition-all">
+                        <div class="absolute w-2.5 h-2.5 bg-primary rounded-full scale-0 peer-checked:scale-100 transition-transform"></div>
+                    </div>
+                    <span class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-primary transition-colors">Não</span>
+                </label>
             </div>
         </div>
     `;
